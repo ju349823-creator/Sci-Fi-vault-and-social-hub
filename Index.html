@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SciFi Vault & Social Hub</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --accent-color: #38bdf8;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-color: #334155;
+            --success-color: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar */
+        nav {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .user-nav-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            background-color: rgba(51, 65, 85, 0.5);
+            transition: 0.3s;
+        }
+
+        .user-nav-profile:hover {
+            background-color: var(--border-color);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 680px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Create Post Card */
+        .create-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .create-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-input {
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 0.9rem;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 90px;
+            margin-bottom: 1rem;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .file-label {
+            background-color: #334155;
+            color: var(--text-sub);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .file-label:hover {
+            color: #fff;
+            background-color: #475569;
+        }
+
+        .submit-btn {
+            background-color: #0284c7;
+            color: #fff;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0369a1;
+        }
+
+        /* Feed List */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .empty-feed {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            color: var(--text-sub);
+        }
+
+        .empty-feed i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Single Post Card */
+        .post-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .author-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .author-box:hover .author-name {
+            color: var(--accent-color);
+        }
+
+        .author-name {
+            font-weight: bold;
+            font-size: 1.05rem;
+            transition: 0.2s;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .license-badge {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .post-body {
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            white-space: pre-line;
+        }
+
+        .pdf-attachment {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ef4444;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        /* Engagement Bar */
+        .engagement-bar {
+            display: flex;
+            gap: 15px;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .react-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .react-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .react-btn.liked {
+            color: #f43f5e;
+        }
+
+        /* Author Profile Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1e293b;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 550px;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .profile-header-modal {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-avatar-large {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 auto 10px auto;
+        }
+
+        .user-story-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .story-item-small {
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-atom"></i> SciFi Hub
+        </div>
+        <div class="user-nav-profile" onclick="openAuthorProfile()">
+            <div class="avatar">M</div>
+            <span>মোহাম্মদ সামিউল আলম</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Create Post Card -->
+        <div class="create-card">
+            <h3><i class="fa-solid fa-pen-nib"></i> নতুন গল্প বা লেখা যোগ করুন</h3>
+            <textarea id="postInput" class="post-input" placeholder="আপনার সায়েন্স ফিকশন গল্প বা প্লট এখানে লিখুন..."></textarea>
+            
+            <div class="action-row">
+                <label class="file-label">
+                    <i class="fa-solid fa-file-pdf"></i> পিডিএফ ফাইল সংযুক্ত করুন
+                    <input type="file" id="pdfInput" accept=".pdf" style="display: none;" onchange="updateFileLabel(this)">
+                </label>
+                <span id="fileNameDisplay" style="font-size: 0.8rem; color: var(--success-color);"></span>
+                <button class="submit-btn" onclick="publishPost()">পোস্ট ও লাইসেন্স তৈরি করুন</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Feed Container -->
+        <div class="feed-container" id="feedContainer">
+            <!-- Initially empty state until you publish your post -->
+            <div class="empty-feed" id="emptyState">
+                <i class="fa-solid fa-box-open"></i>
+                <p>এখনো কোনো গল্প পোস্ট করা হয়নি।</p>
+                <p style="font-size: 0.85rem; margin-top: 4px;">উপরের ফর্ম থেকে আপনার প্রথম গল্প প্রকাশ করুন!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Author Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="profile-header-modal">
+                <div class="profile-avatar-large">M</div>
+                <h2>মোহাম্মদ সামিউল আলম</h2>
+                <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 4px;">সায়েন্স ফিকশন লেখক & কন্টেন্ট ক্রিয়েটর</p>
+            </div>
+
+            <h4 style="color: var(--accent-color); margin-bottom: 10px;">প্রকাশিত গল্পসমূহ:</h4>
+            <div class="user-story-list" id="userStoryList">
+                <!-- User's stories will be populated here -->
+                <p style="color: var(--text-sub); font-size: 0.85rem;" id="noStoryMsg">এখনো কোনো লেখা পোস্ট করা হয়নি।</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let postsData = [];
+        let selectedPdfName = "";
+
+        function updateFileLabel(input) {
+            if (input.files.length > 0) {
+                selectedPdfName = input.files[0].name;
+                document.getElementById('fileNameDisplay').innerText = "সংযুক্ত: " + selectedPdfName;
+            }
+        }
+
+        // Publish a new story/post
+        function publishPost() {
+            const textContent = document.getElementById('postInput').value.trim();
+            if (!textContent) {
+                alert("দয়া করে গল্পের বর্ণনা বা কিছু টেক্সট লিখুন!");
+                return;
+            }
+
+            // Hide empty feed placeholder
+            const emptyState = document.getElementById('emptyState');
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+
+            // Generate auto copyright license
+            const randomId = Math.floor(10000 + Math.random() * 90000);
+            const licenseCode = `#CR-2026-${randomId}`;
+            
+            const newPost = {
+                id: Date.now(),
+                author: "মোহাম্মদ সামিউল আলম",
+                time: "এইমাত্র",
+                content: textContent,
+                pdf: selectedPdfName,
+                license: licenseCode,
+                likes: 0
+            };
+
+            postsData.unshift(newPost);
+            renderFeed();
+
+            // Reset form
+            document.getElementById('postInput').value = "";
+            document.getElementById('pdfInput').value = "";
+            document.getElementById('fileNameDisplay').innerText = "";
+            selectedPdfName = "";
+        }
+
+        // Render main feed
+        function renderFeed() {
+            const feedContainer = document.getElementById('feedContainer');
+            
+            // Clear current items except empty state element if exists
+            const emptyState = document.getElementById('emptyState');
+            feedContainer.innerHTML = "";
+            if(postsData.length === 0 && emptyState) {
+                feedContainer.appendChild(emptyState);
+                return;
+            }
+
+            postsData.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = 'post-card';
+                
+                let pdfHtml = post.pdf ? `<a href="#" class="pdf-attachment"><i class="fa-solid fa-file-pdf"></i> ${post.pdf}</a>` : '';
+
+                postEl.innerHTML = `
+                    <div class="post-header">
+                        <div class="author-box" onclick="openAuthorProfile()">
+                            <div class="avatar">M</div>
+                            <div>
+                                <div class="author-name">${post.author}</div>
+                                <div class="post-date">${post.time}</div>
+                            </div>
+                        </div>
+                        <div class="license-badge">
+                            <i class="fa-solid fa-shield-check"></i> লাইসেন্সকৃত (${post.license})
+                        </div>
+                    </div>
+                    <div class="post-body">${post.content}</div>
+                    ${pdfHtml}
+                    <div class="engagement-bar">
+                        <button class="react-btn" onclick="toggleLike(this, ${post.id})">
+                            <i class="fa-solid fa-heart"></i> পছন্দ (<span class="like-count">${post.likes}</span>)
+                        </button>
+                    </div>
+                `;
+                feedContainer.appendChild(postEl);
+            });
+        }
+
+        // Toggle like
+        function toggleLike(btn, postId) {
+            btn.classList.toggle('liked');
+            const post = postsData.find(p => p.id === postId);
+            if (post) {
+                if (btn.classList.contains('liked')) {
+                    post.likes += 1;
+                } else {
+                    post.likes -= 1;
+                }
+                btn.querySelector('.like-count').innerText = post.likes;
+            }
+        }
+
+        // Open Profile Modal & Render Author's Published Stories
+        function openAuthorProfile() {
+            const modal = document.getElementById('profileModal');
+            const userStoryList = document.getElementById('userStoryList');
+            userStoryList.innerHTML = "";
+
+            if (postsData.length === 0) {
+                userStoryList.innerHTML = `<p style="color: var(--text-sub); font-size: 0.85rem;">এখনো কোনো লেখা পোস্ট করা হয়নি।</p>`;
+            } else {
+                postsData.forEach(post => {
+                    const storyItem = document.createElement('div');
+                    storyItem.className = 'story-item-small';
+                    storyItem.innerHTML = `
+                        <div style="font-weight: bold; font-size: 0.95rem; color: #f8fafc;">${post.content.substring(0, 50)}...</div>
+                        <div style="font-size: 0.75rem; color: var(--success-color); margin-top: 4px;">আইডি: ${post.license}</div>
+                    `;
+                    userStoryList.appendChild(storyItem);
+                });
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
